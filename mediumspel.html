@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medium</title>
+</head>
+<body>
+
+
+  <script src="https://koda.nu/simple.js">
+
+    var zombies = [];
+    var poäng = 0;
+    var i = 0;
+    var immun = false;
+    var powerUpTimer = 0;
+    var antalZombies = 65;
+    var toppHastighet = 9;
+
+
+    while (i < antalZombies){
+      zombies.push({
+      x: random(totalWidth), 
+      y: random(totalHeight),
+      speed: random(1, toppHastighet)}); 
+
+      i += 1
+    }
+
+    
+    function update(){
+      hideMouse();
+      clearScreen();
+
+      poäng += 0.1;
+      powerUpTimer += 0.025;
+
+      if (powerUpTimer > 11){
+        powerUpTimer -= 1
+      }
+
+      i = 0;
+
+      while (i < antalZombies){
+        var zombie = zombies[i];
+
+        picture(zombie.x, zombie.y, "https://prod.smassets.net/assets/cms/cc/uploads/sites/14/taller-header-coronavirus-resources-768x604.png", 100, 100);
+        picture(mouse.x, mouse.y, "https://pngimg.com/uploads/nose/nose_PNG14.png", 50, 70);
+
+        if (zombie.x < mouse.x)
+          zombie.x += zombie.speed;
+        else
+          zombie.x -= zombie.speed;
+
+        if (zombie.y < mouse.y)
+          zombie.y += zombie.speed;
+        else
+          zombie.y -= zombie.speed;
+
+        if (distance(mouse, zombie) < 5 && (immun == false)){
+          stopUpdate();
+          clearScreen();
+          text(250, 200, 70, "Game over", "red");
+        
+        }
+
+        if(keyboard.space){
+          if(powerUpTimer >= 10){
+            immun = true;
+            powerUpTimer = 0;
+
+            setTimeout(function(){immun = false;}, 3000);
+
+          }
+        };
+
+        i += 1;
+
+    }
+
+    text(150, 50, 20, "Poäng: " + floor(poäng), "red");
+    text(600, 50, 20, "Powerup: " + floor(powerUpTimer), "red");
+
+    if (immun == true){
+      text(600, 100, 50, "IMMUN", "blue");
+    }
+
+    }
+
+  </script>
+</body>
+</html>
