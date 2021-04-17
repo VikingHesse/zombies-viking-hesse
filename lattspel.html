@@ -23,7 +23,9 @@
     var antalZombies = 50;
     var toppHastighet = 8;
 
-
+    // Gör en while loop som räknar hur stor variabeln "antalZombies" är (50) och lägger sedan till
+    // en zombie i listan "zombies", så det blir totalt 50st zombies i spelet. Alla zombies har random
+    // positioner och hastighet, hastigheten är mellan 1 och "toppHastighet", vilket är 8 i detta fall
     while (i < antalZombies){
       zombies.push({
       x: random(totalWidth), 
@@ -33,26 +35,40 @@
       i += 1
     }
 
-    
+    // Använder funktionen "update" ifrån koda.nu, det är en funktion som gör en oändlig loop som 
+    // upprepas många gånger per sekund.
     function update(){
+
+      //Hidemouse gömmer muspekaren, clearScreen tömmer allt på skärmen en gång i varje loop
+      //Detta görs för att zombiesarna ska kunna röra på sig ordentligt, annars fastnar de. 
       hideMouse();
       clearScreen();
 
+
+      //Ger poäng till variablerna poäng och poweruptimer, 0.1 poäng ges per loop i updatefunktionen
+      //Poweruptimer fylls på med 0.05 per loop i updatefunktionen.
       poäng += 0.1;
       powerUpTimer += 0.05;
 
+      //Ett if kommando som kollar om poweruptimer är mer än 10, om den är det så ska ett poäng tas bort och 
+      //den ska hamna på 10 igen, detta är så att det största värdet poweruptimer kan få är 10. 
       if (powerUpTimer > 11){
         powerUpTimer -= 1
       }
-    
+      //Ger variabeln i från förut ett nytt värde (0), som ska användas i kommande loop
       i = 0;
 
+      //Gör en while loop som upperas varje gång i är under "antalZombies" (50). Loopen går igenom
+      //listan zombies och lägger till zombien i variabeln "zombie".
       while (i < antalZombies){
         var zombie = zombies[i];
 
+
+        // byter bild på zombien till en png bild på corona, den sätter också en bild på musens kordinater. 
         picture(zombie.x, zombie.y, "https://prod.smassets.net/assets/cms/cc/uploads/sites/14/taller-header-coronavirus-resources-768x604.png", 100, 100);
         picture(mouse.x, mouse.y, "https://pngimg.com/uploads/nose/nose_PNG14.png", 50, 70);
 
+        //flera if commands som kollar var musens kordinater är och gör så att zombies rör sig mot musen
         if (zombie.x < mouse.x)
           zombie.x += zombie.speed;
         else
@@ -63,6 +79,9 @@
         else
           zombie.y -= zombie.speed;
 
+
+        //Kollar distansen mellan musen och zombien, om den är mindre än 5 och om spelaren inte är immun
+        //så stoppas funktionen "stopupdate" och det blir game over.
         if (distance(mouse, zombie) < 5 && (immun == false)){
           stopUpdate();
           clearScreen();
@@ -70,6 +89,8 @@
         
         }
 
+        //if kod som gör att om man klickar på space och har powerUptimer på 10 så blir man immun och
+        //återställer poweruptimer till 0. Sen skapas en settimeout funktion som tar bort immuniteten efter 3 sekunder.
         if(keyboard.space){
           if(powerUpTimer >= 10){
             immun = true;
@@ -84,9 +105,11 @@
 
     }
 
+    //texten till poäng och powerup
     text(150, 50, 20, "Poäng: " + floor(poäng), "red");
     text(600, 50, 20, "Powerup: " + floor(powerUpTimer), "red");
 
+    //kollar om immun är sant, och om den är det så står det IMMUN på skärmen, så spelaren ska veta när den är immun
     if (immun == true){
       text(600, 100, 50, "IMMUN", "blue");
     }
